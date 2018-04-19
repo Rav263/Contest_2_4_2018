@@ -10,9 +10,9 @@ section .rodata
 
 
 section .bss
-  a resd 1002
-  b resd 1002
-
+  a resd 1010
+  b resd 1010
+  inp resd 1
 
 section .text
 global CMAIN
@@ -31,32 +31,47 @@ CMAIN:
   sub esp, 16
 
   call get_stdin
-  mov edx, eax
+  mov dword[inp], eax
 
 
+  mov edx, dword[inp]
   mov dword[esp], a
-  mov dword[esp + 4], 1001
+  mov dword[esp + 4], 1010
   mov dword[esp + 8], edx
   call fgets
 
-  PRINT_HEX 4, eax
 
+
+  mov edx, dword[inp]
   mov dword[esp], b
-  mov dword[esp + 4], 1001
+  mov dword[esp + 4], 1010
   mov dword[esp + 8], edx
   call fgets
 
-  PRINT_STRING a
-  NEWLINE
-  PRINT_STRING b
-  NEWLINE
+  mov ecx, 0
+
+  .top1:
+    inc ecx
+    cmp byte[a + ecx], 0
+  jnz .top1
+
+  mov byte[a + ecx - 1], 0
+
+  mov ecx, 0
+
+  .top2:
+    inc ecx
+    cmp byte[b + ecx], 0
+  jnz .top2
+
+  mov byte[b + ecx - 1], 0
 
   mov dword[esp], a
   mov dword[esp + 4], b
 
   call strstr
 
-  mov ecx, eax
+  mov edi, eax
 
   mov dword[esp], b
   mov dword[esp + 4], a
@@ -70,7 +85,7 @@ CMAIN:
   jmp .end
   
   .a:
-  cmp ecx, 0
+  cmp edi, 0
   jz .b
     mov dword[esp], output2
     call printf
