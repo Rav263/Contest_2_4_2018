@@ -6,7 +6,7 @@ section .rodata
   output db "%d", 10, 0
 
 section .bss
-  arr resb 5050
+  arr resb 5500
   a resd 1
   b resd 1
   sum resd 1
@@ -71,15 +71,16 @@ CMAIN:
       call strcmp
 
       cmp eax, 0
-      jnz .a
-      inc dword[sum]
-      jmp .end2
-      .a:
+      jz .end2
       inc edi
 
       cmp edi, dword[a]
     jnz .top3
+    
+    inc dword[sum]
+    
     .end2:
+    
     inc ebx
     cmp ebx, dword[a] 
   jnz .top2
@@ -87,6 +88,8 @@ CMAIN:
   .end:
 
   mov eax, dword[sum]
+
+  inc eax
 
   mov dword[esp], output
   mov dword[esp + 4], eax
