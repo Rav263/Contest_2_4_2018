@@ -26,6 +26,12 @@ CMAIN:
   and esp, -16
   sub esp, 16
 
+  push ebx
+  push edi
+  push esi
+  sub esp, 4
+
+
   mov dword[esp], file
   mov dword[esp + 4], read
   call fopen
@@ -55,7 +61,10 @@ CMAIN:
 
   call printf
 
-
+  add esp, 4
+  pop esi
+  pop edi
+  pop ebx
 
   mov eax, 0
 

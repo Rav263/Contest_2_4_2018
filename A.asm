@@ -27,8 +27,14 @@ CMAIN:
   push ebp
   mov ebp, esp
 
+
   and esp, -16
   sub esp, 16
+
+  push ebx
+  push edi
+  push esi
+  sub esp, 4
 
   call get_stdin
   mov dword[inp], eax
@@ -95,6 +101,11 @@ CMAIN:
     mov dword[esp], output3
     call printf
   .end:
+
+  add esp, 4
+  pop esi
+  pop edi
+  pop ebx
 
   mov esp, ebp
   pop ebp

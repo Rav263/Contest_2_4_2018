@@ -25,6 +25,11 @@ CMAIN:
   and esp, -16
   sub esp, 16
 
+  push ebx
+  push edi
+  push esi
+  sub esp, 4
+
   mov dword[esp], input2
   mov dword[esp + 4], a
   call scanf
@@ -94,6 +99,11 @@ CMAIN:
   mov dword[esp], output
   mov dword[esp + 4], eax
   call printf
+
+  add esp, 4
+  pop esi
+  pop edi
+  pop ebx
 
   mov esp, ebp
   pop ebp
