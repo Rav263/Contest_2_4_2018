@@ -8,7 +8,7 @@ section .rodata
 CEXTERN malloc
 CEXTERN scanf
 CEXTERN printf
-CEXTERN clear
+CEXTERN free
 
 
 section .bss
@@ -30,6 +30,11 @@ CMAIN:
 
   and esp, -16
   sub esp, 16
+
+  push ebx
+  push edi
+  push esi
+  sub esp, 4
 
   ;считывание количества матриц и инициализация памяти 
 
@@ -146,7 +151,7 @@ CMAIN:
 
   mov dword[a], 0
 
-  ;А вот тут ты должен написать поиск максимума
+  ;А вот тут поиск  максимума
   .top3:
     cmp esi, dword[n]
     jz .end3
@@ -206,6 +211,37 @@ CMAIN:
 
     cmp edi, dword[m]
   jnz .top4
+ 
+  ;очистка памяти
+
+  mov ebx, dword[armat]
+  mov esi, 0
+
+  .top6:
+    mov ecx, dword[ebx + esi * 4]
+
+    mov dword[esp], ecx
+    call free
+
+    inc esi
+    cmp esi, dword[n]
+  jnz .top6
+
+  mov dword[esp], ebx
+  call free
+
+  mov eax, dword[tr]
+  mov dword[esp], eax
+  call free
+
+  mov eax, dword[arr]
+  mov dword[esp], eax
+  call free
+
+  add esp, 4
+  pop esi
+  pop edi
+  pop ebx
 
   mov eax, 0
   leave
